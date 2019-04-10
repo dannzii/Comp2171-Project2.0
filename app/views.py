@@ -1,22 +1,92 @@
 import os
-from app import app
+import datetime
+from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash, session, abort
 from werkzeug.utils import secure_filename
-from flask_login import login_user, logout_user, current_user, login_required, login_manager, user_loader
-from app.forms import Customer, Users
-from app.models import UserProfile
+from flask_login import login_user, logout_user, current_user, login_required
+from app.forms import Customer, User, Appointment
+from app.models import UserProfile, Customers
 
 
 @app.route('/')
 def home():
     """Render website's home page."""
     return render_template('home.html')
+
+
+@app.route('/addemployee/', methods=['POST'])
+def add_employee():
+    form = User()
+    if request.methods == "POST":
+        if form.validate_on_submit():
+            firstname = form.firstname.data
+            lastname = form.lastname.data
+            email = form.email.data
+            address = form.address.data
+            username = form.username.data
+            password = form.password.data
+            User_type = form.User_type.data
+            
+        return render_template('addemployee.html', form=form) 
     
+@app.route('/createAppointment/', methods=['POST'])
+def Create_appointment():
+    this_form = Appointment()
+    
+    if request.methods == "POST":
+        if this_form.validate_on_submit():
+            appointment= this_form.appointment.data
+            return render_template('createappointment.html',form=this_form)
+
+@app.route("/customerProfiles")
+def customerprofiles():
+    users = Customers.query.all()
+    profiles = []
+    
+    for user in users:
+        profiles.append({"firstname":user.first_name, "lastname": user.last_name, "gender": user.gender, "location":user.location, "created_on":user.created_on, "id":user.id})
+    
+    return render_template("list-of-customer.html", profiles = profiles)
+    
+@app.route('/profile/<userid>')
+def inidi_customer_profile(userid):
+    user = Customers.query.filter_by(id=userid).first()
+    
+    if user is None:
+        return redirect(url_for('home'))
+        
+    c_y = int(user.created_on.split("-")[0])
+    c_m = int(user.created_on.split("-")[1])
+    c_d = int(user.created_on.split("-")[2])
+    
+    user.created_on = format_date_joined(c_y, c_m, c_d)
+    
+    return render_template("inidi_customer_profile.html", user = user)
+
+def format_date_joined(yy,mm,dd):
+    return datetime.date(yy,mm,dd).strftime("%B, %d,%Y")
+   
 @app.route('/login', methods=['POST', 'GET'])
 def login():
 
-    my_login_form = Users()
+    my_login_form = User()
+    error = None
     if request.method == 'POST':
+        username = my_login_form.username.data
+        password = my_login_form.password.data
+         
+        if request.form['username'] != app.config['USERNAME'] or request.form['password'] != app.config['PASSWORD']:
+            error = 'Invalid username or password'
+        else:
+            session['logged_in'] = True
+            
+            flash('You were logged in', 'success')
+            return render_template('Manager.html')
+            
+    flash('An error occurred while you tried to log in', 'Please try again')
+    return render_template('login.html', form=my_login_form)
+"""
+        my_login_form = User()
         if my_login_form.validate_on_submit():
             
             username = my_login_form.username.data
@@ -27,13 +97,8 @@ def login():
             if user is not None and user.password == password:
                 # get user id, load into session
                 login_user(user)
-            
-            flash('You were logged in', 'success')
-            return redirect(url_for('signedIn'))
-            
-            
-    flash('An error occurred while you tried to log in', 'Please try again')
-    return render_template('login.html', form=my_login_form)
+"""
+           
     
     
     
@@ -54,23 +119,22 @@ def signedIn():
             return render_template('Employee.html')
         
        
-@app.route('/Register Client')
+@app.route('/registerClient')
 def registration():
-     if not session.get('logged_in'):
+    if not session.get('logged_in'):
         abort(401)
         
         myform = Customer()
-        
         if request.method == 'POST':
             if myform.validate_on_submit():
                 firstname = myform.firstname.data
                 lastname = myform.lastname.data
                 address = myform.address.data
+                gender = myform.gender.data
                 email = myform.email.data
-                appointment = myform.appointment.data
                 
                 flash('registion Complete', 'Success')
-                return redirect(url_for('signedIn'))
+                return redirect(url_for('customerprofiles'))
                 
         flash_errors(myform)
         return render_template('registration.html', form=myform)
@@ -79,6 +143,7 @@ def registration():
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
+    logout_user()
     flash('You were logged out', 'success')
     return render_template(logout.html)
 
@@ -92,7 +157,8 @@ def flash_errors(form):
                 error
 ), 'danger')  
 
-
+# user_loader callback. This callback is used to reload the user object from
+# the user ID stored in the session
 @login_manager.user_loader
 def load_user(id):
     return UserProfile.query.get(int(id))

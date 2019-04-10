@@ -17,6 +17,26 @@ class UserProfile(db.Model):
     def __init__(self, username, password):
         self.username = username
         self.password = generate_password_hash(password, method='pbkdf2:sha256')
+  
+  
+class Customers(db.Model):
+    __tablename__ = 'customer_information'
+
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(80))
+    last_name = db.Column(db.String(80))
+    gender = db.Column(db.String(10))
+    email = db.Column(db.String(80))
+    created_on = db.Column(db.String(12))
+    
+    def __init__(self, first_name, last_name,gender,email, created_on):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.gender = gender
+        self.email = email
+        self.created_on = created_on
+
+    
 
     def is_authenticated(self):
         return True

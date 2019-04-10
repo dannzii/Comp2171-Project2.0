@@ -4,28 +4,34 @@
 {% block main %}
 
     <h2>ADD NEW CUSTOMER</h2>
-    <form action="{{ url_for('signUpCust') }}" method="post">
+    <form action="{{ url_for('registration') }}" method="post">
     {% include 'flash_messages.html' %}
         <div class = "registeration" >
             {{ form.firstname.label }}
             <br>
-            {{ form.firstname }}
+            {{ form.firstname (class='form-control)}}
         </div>
         <div class = "registeration">
             {{ form.lastname.label }}
             <br>
-            {{ form.lastname }}
+            {{ form.lastname (class='form-control)}}
+        </div>
+        <div class = "registeration">
+            {{ form.gender.label }}
+            <br>
+            {{ form.gender (class='form-control)}}
         </div>
         <div class = "registeration">
             {{ form.address.label }}
             <br>
-            {{ form.address }}
+            {{ form.address (class='form-control)}}
         </div>
         <div class = "registeration">
             {{ form.email.label }}
             <br>
-            {{ from.email }}
+            {{ from.email (class='form-control', placeholder="example@example.com")}}
         </div>
+        <br>
         <input type="submit" class="btn btn-primary"/>
     </form>
 

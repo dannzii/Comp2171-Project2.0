@@ -3,8 +3,7 @@
 {% block main %}
   
    <h3>Enter Username and Password</h3>
-   
-   {% include 'flash_messages.html' %}
+   <hr>
 
    <form method="post" action="{{ url_for('login') }}">
         {{ form.csrf_token }}
@@ -16,8 +15,10 @@
       <div class="form-group">
         {{ form.password.label }}
         <br>
-        {{ form.password(class='form-control') }}
+        {{ form.password(class='form-control', placeholder="Enter your password") }}
       </div>
+      
+      <input type="submit" class="btn btn-primary"/>
        
    </form>
    

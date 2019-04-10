@@ -4,13 +4,13 @@
 {% block main %}
 
 <div class="CenterBox">
- <a href="registeration.html">
+ <a href="{{ url_for('registration') }}">
      <button id="customer" type="submit">
          add customer
     </button>
  </a>
 
- <a href = "createappointment.html"> 
+ <a href = "{{ url_for('Create_appointment') }}"> 
      <button> 
          Create Appointment 
      </button>

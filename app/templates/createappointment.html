@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<h1>
+   Appointment 
+</h1>
+<hr>
+
+<h5> 
+    Set appointment here.
+</h5>
+<form action="{{ url_for('Create_appointment') }}" method="post">
+    <div>
+        {{form.appointment.label
+        <br>
+        {{form.appointment}}
+    </div>
+    <input type="submit" class="btn btn-primary"/>
+</form>
+
+
+{% endblock %}
