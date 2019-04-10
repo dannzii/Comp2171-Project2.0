@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+
+{% block main %}
+
+    <h2>ADD NEW CUSTOMER</h2>
+    <form action="{{ url_for('signUpCust') }}" method="post">
+    {% include 'flash_messages.html' %}
+        <div class = "registeration" >
+            {{ form.firstname.label }}
+            <br>
+            {{ form.firstname }}
+        </div>
+        <div class = "registeration">
+            {{ form.lastname.label }}
+            <br>
+            {{ form.lastname }}
+        </div>
+        <div class = "registeration">
+            {{ form.address.label }}
+            <br>
+            {{ form.address }}
+        </div>
+        <div class = "registeration">
+            {{ form.email.label }}
+            <br>
+            {{ from.email }}
+        </div>
+        <input type="submit" class="btn btn-primary"/>
+    </form>
+
+
+{% endblock %}

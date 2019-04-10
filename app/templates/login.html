@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block main %}
+  
+   <h3>Enter Username and Password</h3>
+   
+   {% include 'flash_messages.html' %}
+
+   <form method="post" action="{{ url_for('login') }}">
+        {{ form.csrf_token }}
+      <div class="form-group">
+        {{ form.username.label }}
+        <br>
+        {{ form.username(class='form-control', placeholder="Enter your username") }}
+      </div>
+      <div class="form-group">
+        {{ form.password.label }}
+        <br>
+        {{ form.password(class='form-control') }}
+      </div>
+       
+   </form>
+   
+   
+{% endblock %}
