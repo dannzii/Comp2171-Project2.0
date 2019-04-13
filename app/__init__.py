@@ -11,7 +11,7 @@ PASSWORD = 'password123'
 # SECRET_KEY is needed for session security, the flash() method in this case stores the message in a session
 app.config['SECRET_KEY'] = "Xyuilo134dRTy"
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://lab5:info3180-lab5@localhost/lab5"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://Dannzii:dannzii101@localhost/Froste Byte database"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True # added just to suppress a warning
 
 db = SQLAlchemy(app)
