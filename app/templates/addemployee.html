@@ -7,7 +7,7 @@
     Add Employee
 </h2>
 
-<form method="POST" action="{{ url_for('add_employee') }}">
+<form method="POST" action="{{ url_for('addemployee') }}">
     <div>
         {{form.firstname.label}}
         <br>
@@ -21,7 +21,7 @@
     <div class = "registeration">
             {{ form.gender.label }}
             <br>
-            {{ form.gender (class='form-control)}}
+            {{ form.gender (class='form-control')}}
      </div>
     <div>
         {{form.address.label}}

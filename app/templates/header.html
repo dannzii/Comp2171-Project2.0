@@ -10,15 +10,18 @@
         <a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('registration') }}">Register Client </a>
+        <a class="nav-link" href="{{ url_for('Mission_Statemement') }}"> Mission Statment </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href=""> Customer Search </a>
+        <a class="nav-link" href="{{ url_for('Vission_Statemement') }}"> Vission Statment </a>
       </li>
     </ul>
     <ul class="navbar-nav">
       <li class="nav-item">
         <a class="nav-link" href="{{ url_for('login') }}"> Login </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('logout') }}"> Logout </a>
       </li>
     </ul>
   </div>

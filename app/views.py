@@ -13,12 +13,34 @@ def home():
     """Render website's home page."""
     return render_template('home.html')
 
+@app.route('/mission_statemement')
+def Mission_Statemement():
+    """Render website's Mission Statment page."""
+    return render_template('mission_statement.html')
+    
+    
 
-@app.route('/addemployee/', methods=['POST'])
-def add_employee():
+@app.route('/vission_statemement')
+def Vission_Statemement():
+    """Render website's Vission Statment page."""
+    return render_template('vission_statement.html')
+
+@app.route('/Manager/')
+def manager():
+    """Render website's Manager Page"""
+    return render_template('Manager.html')
+
+
+@app.route('/addemployee/', methods=['POST', 'GET'])
+def addemployee():
+    if not session.get('logged_in'):
+        abort(401)
+        
     form = User()
-    if request.methods == "POST":
+    if request.method == "POST":
+        
         if form.validate_on_submit():
+            
             firstname = form.firstname.data
             lastname = form.lastname.data
             email = form.email.data
@@ -26,17 +48,27 @@ def add_employee():
             username = form.username.data
             password = form.password.data
             User_type = form.User_type.data
-            
-        return render_template('addemployee.html', form=form) 
+        
+        flash('Completed', 'Success')
+        return redirect(url_for('manager'))
     
-@app.route('/createAppointment/', methods=['POST'])
+    flash('An error occured', 'OOPS') 
+    return render_template('addemployee.html',form=form)
+    
+@app.route('/createAppointment/', methods=['POST', 'GET'])
 def Create_appointment():
     this_form = Appointment()
     
     if request.methods == "POST":
         if this_form.validate_on_submit():
+            
             appointment= this_form.appointment.data
-            return render_template('createappointment.html',form=this_form)
+            
+            flash('Your appointment has been set')
+            return redirect(url_for('manager'))
+        else:
+            flash('OOPs an error has occured, please try again')
+            return render_template('createappointment.html', form=this_form)
 
 @app.route("/customerProfiles")
 def customerprofiles():
@@ -72,6 +104,7 @@ def login():
     my_login_form = User()
     error = None
     if request.method == 'POST':
+        
         username = my_login_form.username.data
         password = my_login_form.password.data
          
@@ -81,7 +114,7 @@ def login():
             session['logged_in'] = True
             
             flash('You were logged in', 'success')
-            return render_template('Manager.html')
+            return redirect(url_for('manager'))
             
     flash('An error occurred while you tried to log in', 'Please try again')
     return render_template('login.html', form=my_login_form)
@@ -119,14 +152,15 @@ def signedIn():
             return render_template('Employee.html')
         
        
-@app.route('/registerClient')
+@app.route('/registerClient', methods=['POST', 'GET'])
 def registration():
     if not session.get('logged_in'):
         abort(401)
         
         myform = Customer()
-        if request.method == 'POST':
+        if request.method == "POST":
             if myform.validate_on_submit():
+                
                 firstname = myform.firstname.data
                 lastname = myform.lastname.data
                 address = myform.address.data
@@ -145,7 +179,7 @@ def logout():
     session.pop('logged_in', None)
     logout_user()
     flash('You were logged out', 'success')
-    return render_template(logout.html)
+    return render_template('logout.html')
 
 
 
