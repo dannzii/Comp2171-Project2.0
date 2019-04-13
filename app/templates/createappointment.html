@@ -6,15 +6,17 @@
 </h1>
 <hr>
 
-<h5> 
+<p> 
     Set appointment here.
-</h5>
+</p> 
+
 <form action="{{ url_for('Create_appointment') }}" method="post">
     <div>
-        {{form.appointment.label
+        {{form.appointment.label}}
         <br>
         {{form.appointment}}
     </div>
+    <br>
     <input type="submit" class="btn btn-primary"/>
 </form>
 

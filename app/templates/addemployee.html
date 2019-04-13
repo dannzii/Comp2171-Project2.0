@@ -8,48 +8,41 @@
 </h2>
 
 <form method="POST" action="{{ url_for('addemployee') }}">
-    <div>
+    <div class = "border-style">
         {{form.firstname.label}}
         <br>
-        {{form.firstname}}
-    </div>
-    <div>
+        {{form.firstname (class='form-control')}}
+    <br>
         {{form.lastname.label}}
         <br>
-        {{form.lastname}}
-    </div>
-    <div class = "registeration">
-            {{ form.gender.label }}
-            <br>
-            {{ form.gender (class='form-control')}}
-     </div>
-    <div>
+        {{form.lastname (class='form-control')}}
+        <br>
+        {{ form.gender.label }}
+         <br>
+        {{ form.gender (class='form-control') }}
+        <br>
         {{form.address.label}}
         <br>
-        {{form.address}}
-    </div>
-    <div>
+        {{form.address (class='form-control')}}
+        <br
         {{form.email.label}}
         <br>
-        {{form.email}}
-    </div>
-    <div>
+        {{form.email (class='form-control')}}
+        <br>
         {{form.username.label}}
         <br>
-        {{form.username}}
-    </div>
-    <div>
+        {{form.username (class='form-control')}}
+        <br>
         {{form.password.label}}
         <br>
-        {{form.password}}
-    </div>
-    <div>
+        {{form.password (class='form-control')}}
+        <br>
         {{form.User_type.label}}
         <br>
-        {{form.User_type}}
-    </div>
+        {{form.User_type (class='form-control')}}
     <br>
     <input type="submit"  class="btn btn-primary"/>
+    </div>
 </form>
 
 

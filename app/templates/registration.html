@@ -3,36 +3,35 @@
 
 {% block main %}
 
-    <h2>ADD NEW CUSTOMER</h2>
-    <form action="{{ url_for('registration') }}" method="post">
+    <h2>Add New Customer</h2>
+    <hr>
     {% include 'flash_messages.html' %}
-        <div class = "registeration" >
+    
+    <form action="{{ url_for('registration') }}" method="post">
+    <div class = "border-style">
             {{ form.firstname.label }}
             <br>
-            {{ form.firstname (class='form-control)}}
-        </div>
-        <div class = "registeration">
+            {{ form.firstname (class='form-control')}}
+            <br>
             {{ form.lastname.label }}
             <br>
-            {{ form.lastname (class='form-control)}}
-        </div>
-        <div class = "registeration">
+            {{ form.lastname (class='form-control')}}
+            <br>
             {{ form.gender.label }}
             <br>
-            {{ form.gender (class='form-control)}}
-        </div>
-        <div class = "registeration">
+            {{ form.gender (class='form-control')}}
+            <br>
             {{ form.address.label }}
             <br>
-            {{ form.address (class='form-control)}}
-        </div>
-        <div class = "registeration">
+            {{ form.address (class='form-control')}}
+            <br>
             {{ form.email.label }}
             <br>
-            {{ from.email (class='form-control', placeholder="example@example.com")}}
-        </div>
+            {{ form.email (class='form-control', placeholder="example@example.com")}}
+       
         <br>
         <input type="submit" class="btn btn-primary"/>
+    </div>
     </form>
 
 

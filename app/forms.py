@@ -9,7 +9,7 @@ class  Customer(FlaskForm):
     address = StringField ('Address', validators=[InputRequired()])
     email = StringField ('Email', validators=[InputRequired()])
     appointment = StringField ('Appointment', validators=[InputRequired()])
-    gender = SelectField('Gender', choices = [('Select One'),('M','Male'),('F','Female')]) 
+    gender = SelectField('Gender', choices = [('','Select One'),('M','Male'),('F','Female')]) 
     ac_type = StringField ('Air Condition Unit', validators=[InputRequired()])
     unit_service = SelectField ('Type of service to be done to the unit', choices = ['Types', 'Installation', 'Repair', 'Gas Refile', 'General Service'])
 

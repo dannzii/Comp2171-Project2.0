@@ -3,9 +3,11 @@
 
 {% block main %}
 
+ {% include 'flash_messages.html' %}
+
 <div class="CenterBox">
  <a href="{{ url_for('addemployee') }}">
-     <button id="employee" type="submit">
+     <button id="customer" type="submit">
          Add Employee
     </button>
  </a>
@@ -39,7 +41,7 @@
  <br>
  
  <a href="">
-     <button id="delete" type="submit"> 
+     <button id="customer" type="submit"> 
          Delete Client 
      </button>
  </a>

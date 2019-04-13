@@ -49,26 +49,48 @@ def addemployee():
             password = form.password.data
             User_type = form.User_type.data
         
-        flash('Completed', 'Success')
+        flash('Registration Completed', 'Success')
         return redirect(url_for('manager'))
     
-    flash('An error occured', 'OOPS') 
+    flash_errors (form)  
     return render_template('addemployee.html',form=form)
+
+
+@app.route('/registerClient', methods=['POST', 'GET'])
+def registration():
+    if not session.get('logged_in'):
+        abort(401)
     
+    thisform = Customer()
+    if request.method == "POST":
+        
+        if thisform.validate_on_submit():
+            firstname = thisform.firstname.data
+            lastname = thisform.lastname.data
+            gender = thisform.gender.data
+            address = thisform.address.data
+            email = thisform.email.data
+            
+        flash('Registration Completed', 'Success')
+        return redirect(url_for('manager'))
+        
+    flash_errors (thisform) 
+    return render_template('registration.html' , form=thisform)
+        
 @app.route('/createAppointment/', methods=['POST', 'GET'])
 def Create_appointment():
     this_form = Appointment()
     
-    if request.methods == "POST":
+    if request.method == "POST":
         if this_form.validate_on_submit():
             
             appointment= this_form.appointment.data
             
             flash('Your appointment has been set')
             return redirect(url_for('manager'))
-        else:
-            flash('OOPs an error has occured, please try again')
-            return render_template('createappointment.html', form=this_form)
+            
+    flash_errors (this_form) 
+    return render_template('createappointment.html', form=this_form)
 
 @app.route("/customerProfiles")
 def customerprofiles():
@@ -116,7 +138,7 @@ def login():
             flash('You were logged in', 'success')
             return redirect(url_for('manager'))
             
-    flash('An error occurred while you tried to log in', 'Please try again')
+    flash_errors (my_login_form) 
     return render_template('login.html', form=my_login_form)
 """
         my_login_form = User()
@@ -137,43 +159,22 @@ def login():
     
 @app.route('/signedIn')   
 def signedIn():
-     if not session.get('logged_in'):
-        abort(401)
-        
-        
-        user = UserProfile.query.filter_by(username=username).first()
-        if user is user.username == "Hyatt":
-            flash('Welcome Mr.Hyatt')
-            return render_template('Manager.html')
-            
-            
-        elif user is user.username == "Emplo":
-            flash('Welcome')
-            return render_template('Employee.html')
-        
-       
-@app.route('/registerClient', methods=['POST', 'GET'])
-def registration():
     if not session.get('logged_in'):
         abort(401)
         
-        myform = Customer()
-        if request.method == "POST":
-            if myform.validate_on_submit():
-                
-                firstname = myform.firstname.data
-                lastname = myform.lastname.data
-                address = myform.address.data
-                gender = myform.gender.data
-                email = myform.email.data
-                
-                flash('registion Complete', 'Success')
-                return redirect(url_for('customerprofiles'))
-                
-        flash_errors(myform)
-        return render_template('registration.html', form=myform)
-
-
+        
+    user = UserProfile.query.filter_by(username=username).first()
+    if user is user.username == "Hyatt":
+        flash('Welcome Mr.Hyatt')
+        return render_template('Manager.html')
+        
+        
+    elif user is user.username == "Emplo":
+        flash('Welcome')
+        return render_template('Employee.html')
+        
+        
+        
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
