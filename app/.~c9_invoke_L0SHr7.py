@@ -8,7 +8,7 @@ class  Customer(FlaskForm):
     firstname = StringField('Firstname', validators=[InputRequired()])
     lastname = StringField('Lastname', validators=[InputRequired()])
     address = StringField ('Address', validators=[InputRequired()])
-    email = StringField ('Email', validators=[InputRequired()])
+    phoneNum = StingField ('Phone Number')
     phoneNum = StringField ('Phone Number', validators=[InputRequired()])
     Company_name = StringField ('Company Name', validators=[InputRequired()])
     gender = SelectField('Gender', choices = [('','Select One'),('M','Male'),('F','Female')]) 
@@ -41,5 +41,5 @@ class LoginUser(FlaskForm):
     
 class AC(FlaskForm):
     ac_type = StringField ('Air Condition Unit', validators=[InputRequired()])
-    ac_issue = StringField ('Air Condition Issue', validators=[InputRequired()])
+    ac_issue = StringField ('Air Condition I', validators=[InputRequired()])
     unit_service = SelectField ('Type of service to be done to the unit', choices = ['Types', 'Installation', 'Repair', 'Gas Refile', 'General Service'])

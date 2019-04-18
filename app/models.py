@@ -25,15 +25,21 @@ class Customers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(80))
     last_name = db.Column(db.String(80))
+    address = db.Column(db.String(120))
     gender = db.Column(db.String(10))
     email = db.Column(db.String(80))
+    username = db.Column(db.String(80))
+    password = db.Column(db.String(80))
+    user_type = db.Column(db.String(100))
     created_on = db.Column(db.String(12))
     
-    def __init__(self, first_name, last_name,gender,email, created_on):
+    def __init__(self, first_name, last_name,gender,email,username,password,created_on):
         self.first_name = first_name
         self.last_name = last_name
         self.gender = gender
         self.email = email
+        self.username = username
+        self.password = generate_password_hash(password, method='pbkdf2:sha256')
         self.created_on = created_on
 
     

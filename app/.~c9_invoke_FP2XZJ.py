@@ -4,7 +4,7 @@ from wtforms import TextAreaField, StringField, SelectField, PasswordField, Sele
 
 
 class  Customer(FlaskForm):
-    title =  SelectField('Title', choices = [('','Select One'),('M','Miss'),('Mrs','Mrs'), ('Mr','Mr')]) 
+    title =  SelectField('Title', choices = [('','Select One'),('M','Miss'),('mrs','Female')]) 
     firstname = StringField('Firstname', validators=[InputRequired()])
     lastname = StringField('Lastname', validators=[InputRequired()])
     address = StringField ('Address', validators=[InputRequired()])
@@ -41,5 +41,5 @@ class LoginUser(FlaskForm):
     
 class AC(FlaskForm):
     ac_type = StringField ('Air Condition Unit', validators=[InputRequired()])
-    ac_issue = StringField ('Air Condition Issue', validators=[InputRequired()])
+    ac_issue = StringField ('Air Condition I', validators=[InputRequired()])
     unit_service = SelectField ('Type of service to be done to the unit', choices = ['Types', 'Installation', 'Repair', 'Gas Refile', 'General Service'])

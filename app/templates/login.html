@@ -3,6 +3,7 @@
 {% block main %}
   
    <h3>Enter Username and Password</h3>
+   {% include 'flash_messages.html' %}
    <hr>
 
    <form method="post" action="{{ url_for('login') }}">

@@ -3,8 +3,9 @@ import datetime
 from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash, session, abort
 from werkzeug.utils import secure_filename
+from werkzeug.security import check_password_hash
 from flask_login import login_user, logout_user, current_user, login_required
-from app.forms import Customer, User, Appointment
+from app.forms import Customer, User, Appointment, LoginUser
 from app.models import UserProfile, Customers
 
 
@@ -40,15 +41,25 @@ def addemployee():
     if request.method == "POST":
         
         if form.validate_on_submit():
+            firstname = Customers(first_name = form.get("firstname"))
+            lastname = Customers(last_name = form.get("lastname"))
+            gender = Customers(gender = form.get("gender"))
+            email = Customers(email = form.get("email"))
+            address = Customers(address = form.get("address"))
+            username = Customers(username = form.get("username"))
+            password = Customers(password = form.get("password"))
+            user_type = Customers(user_type = form.get("User_type"))
             
-            firstname = form.firstname.data
-            lastname = form.lastname.data
-            email = form.email.data
-            address = form.address.data
-            username = form.username.data
-            password = form.password.data
-            User_type = form.User_type.data
-        
+            db.session.add(firstname)
+            db.session.add(lastname)
+            db.session.add(gender)
+            db.session.add(email)
+            db.session.add(address)
+            db.session.add(username)
+            db.session.add(password)
+            db.session.add(user_type)
+            
+            db.session.commit()
         flash('Registration Completed', 'Success')
         return redirect(url_for('manager'))
     
@@ -123,25 +134,8 @@ def format_date_joined(yy,mm,dd):
 @app.route('/login', methods=['POST', 'GET'])
 def login():
 
-    my_login_form = User()
-    error = None
+    my_login_form = LoginUser()
     if request.method == 'POST':
-        
-        username = my_login_form.username.data
-        password = my_login_form.password.data
-         
-        if request.form['username'] != app.config['USERNAME'] or request.form['password'] != app.config['PASSWORD']:
-            error = 'Invalid username or password'
-        else:
-            session['logged_in'] = True
-            
-            flash('You were logged in', 'success')
-            return redirect(url_for('manager'))
-            
-    flash_errors (my_login_form) 
-    return render_template('login.html', form=my_login_form)
-"""
-        my_login_form = User()
         if my_login_form.validate_on_submit():
             
             username = my_login_form.username.data
@@ -149,13 +143,33 @@ def login():
             
             user = UserProfile.query.filter_by(username=username).first()
             
-            if user is not None and user.password == password:
+            if user is not None and check_password_hash(user.password, password ):
+                remember_me = False
+                
+                if 'remember_me' in request.form:
+                    remember_me = True
                 # get user id, load into session
-                login_user(user)
-"""
-           
+                login_user(user, remember=remember_me)
+                
+            next_page = request.args.get('next')
+            # remember to flash a message to the user
+            flash("Login Successful", "success")
+            print (next_page)
+            return redirect(url_for("manager") )
+            
+    flash_errors (my_login_form) 
+    return render_template('login.html', form=my_login_form)
+
+@app.route('/<file_name>.txt')
+@login_required
+def send_text_file(file_name):
+    """Send your static text file."""
+    file_dot_text = file_name + '.txt'
+    return app.send_static_file(file_dot_text)
     
-    
+@login_manager.user_loader
+def load_user(id):
+    return UserProfile.query.get(int(id))    
     
 @app.route('/signedIn')   
 def signedIn():
@@ -177,8 +191,8 @@ def signedIn():
         
 @app.route('/logout')
 def logout():
-    session.pop('logged_in', None)
     logout_user()
+    
     flash('You were logged out', 'success')
     return render_template('logout.html')
 
@@ -194,9 +208,7 @@ def flash_errors(form):
 
 # user_loader callback. This callback is used to reload the user object from
 # the user ID stored in the session
-@login_manager.user_loader
-def load_user(id):
-    return UserProfile.query.get(int(id))
+
 
 @app.after_request
 def add_header(response):

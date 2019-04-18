@@ -41,5 +41,20 @@ class LoginUser(FlaskForm):
     
 class AC(FlaskForm):
     ac_type = StringField ('Air Condition Unit', validators=[InputRequired()])
-    ac_issue = StringField ('Air Condition Issue', validators=[InputRequired()])
+    ac_issue = StringField ('Air Condition I', validators=[InputRequired()])
     unit_service = SelectField ('Type of service to be done to the unit', choices = ['Types', 'Installation', 'Repair', 'Gas Refile', 'General Service'])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
