@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash
 from flask_login import login_user, logout_user, current_user, login_required
 from app.forms import Customer, User, Appointment, LoginUser
-from app.models import UserProfile, Customers
+from app.models import UserProfile, Customers, CreateUser
 
 
 @app.route('/')
@@ -27,37 +27,30 @@ def Vission_Statemement():
     return render_template('vission_statement.html')
 
 @app.route('/Manager/')
+@login_required
 def manager():
     """Render website's Manager Page"""
     return render_template('Manager.html')
 
 
 @app.route('/addemployee/', methods=['POST', 'GET'])
+@login_required
 def addemployee():
-    if not session.get('logged_in'):
-        abort(401)
-        
-    form = User()
+
+    form = User() 
     if request.method == "POST":
         
         if form.validate_on_submit():
-            firstname = Customers(first_name = form.get("firstname"))
-            lastname = Customers(last_name = form.get("lastname"))
-            gender = Customers(gender = form.get("gender"))
-            email = Customers(email = form.get("email"))
-            address = Customers(address = form.get("address"))
-            username = Customers(username = form.get("username"))
-            password = Customers(password = form.get("password"))
-            user_type = Customers(user_type = form.get("User_type"))
+            CreateUser(first_name = form.get("firstname"))
+            CreateUser(last_name = form.get("lastname"))
+            CreateUser(gender = form.get("gender"))
+            CreateUser(email = form.get("email"))
+            CreateUser(address = form.get("address"))
+            CreateUser(username = form.get("username"))
+            CreateUser(password = form.get("password"))
+            CreateUser(user_type = form.get("User_type"))
             
-            db.session.add(firstname)
-            db.session.add(lastname)
-            db.session.add(gender)
-            db.session.add(email)
-            db.session.add(address)
-            db.session.add(username)
-            db.session.add(password)
-            db.session.add(user_type)
+            db.session.add(CreateUser)
             
             db.session.commit()
         flash('Registration Completed', 'Success')
@@ -68,19 +61,22 @@ def addemployee():
 
 
 @app.route('/registerClient', methods=['POST', 'GET'])
+@login_required
 def registration():
-    if not session.get('logged_in'):
-        abort(401)
-    
     thisform = Customer()
     if request.method == "POST":
         
         if thisform.validate_on_submit():
-            firstname = thisform.firstname.data
-            lastname = thisform.lastname.data
-            gender = thisform.gender.data
-            address = thisform.address.data
-            email = thisform.email.data
+            Customers(first_name = thisform.get("firstname"))
+            Customers(last_name = thisform.get("lastname"))
+            Customers(gender = thisform.get("gender"))
+            Customers(email = thisform.get("email"))
+            Customers(address = thisform.get("address"))
+            Customers(phoneNum = thisform.get("phoneNum"))
+            
+            db.session.add(Customers)
+            
+            db.session.commit()
             
         flash('Registration Completed', 'Success')
         return redirect(url_for('manager'))
@@ -89,9 +85,10 @@ def registration():
     return render_template('registration.html' , form=thisform)
         
 @app.route('/createAppointment/', methods=['POST', 'GET'])
+@login_required
 def Create_appointment():
+        
     this_form = Appointment()
-    
     if request.method == "POST":
         if this_form.validate_on_submit():
             
@@ -104,17 +101,22 @@ def Create_appointment():
     return render_template('createappointment.html', form=this_form)
 
 @app.route("/customerProfiles")
+@login_required
 def customerprofiles():
+    
     users = Customers.query.all()
     profiles = []
     
     for user in users:
-        profiles.append({"firstname":user.first_name, "lastname": user.last_name, "gender": user.gender, "location":user.location, "created_on":user.created_on, "id":user.id})
+        profiles.append({"firstname":user.first_name, "lastname": user.last_name, "gender": user.gender, "email":user.email, "created_on":user.created_on, "id":user.id})
     
-    return render_template("list-of-customer.html", profiles = profiles)
+    return render_template("list-of-customer.html", profile = profiles)
     
 @app.route('/profile/<userid>')
+@login_required
 def inidi_customer_profile(userid):
+    
+    
     user = Customers.query.filter_by(id=userid).first()
     
     if user is None:
@@ -133,32 +135,31 @@ def format_date_joined(yy,mm,dd):
    
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    if current_user.is_authenticated:
+        redirect(url_for('home'))
 
     my_login_form = LoginUser()
-    if request.method == 'POST':
-        if my_login_form.validate_on_submit():
+    if request.method == 'POST'and my_login_form.validate_on_submit():
+        
             
-            username = my_login_form.username.data
-            password = my_login_form.password.data
-            
-            user = UserProfile.query.filter_by(username=username).first()
-            
-            if user is not None and check_password_hash(user.password, password ):
-                remember_me = False
-                
-                if 'remember_me' in request.form:
-                    remember_me = True
+        user = UserProfile.query.filter_by(username = my_login_form.username.data).first()
                 # get user id, load into session
-                login_user(user, remember=remember_me)
-                
+        if user is not None and check_password_hash(user.password, my_login_form.password.data):
+            login_user(user)
+                    
             next_page = request.args.get('next')
             # remember to flash a message to the user
             flash("Login Successful", "success")
-            print (next_page)
-            return redirect(url_for("manager") )
+            return redirect(next_page or url_for('manager'))
             
     flash_errors (my_login_form) 
     return render_template('login.html', form=my_login_form)
+    
+@login_manager.user_loader
+def load_user(id):
+    return UserProfile.query.get(int(id))    
+    
+
 
 @app.route('/<file_name>.txt')
 @login_required
@@ -167,10 +168,7 @@ def send_text_file(file_name):
     file_dot_text = file_name + '.txt'
     return app.send_static_file(file_dot_text)
     
-@login_manager.user_loader
-def load_user(id):
-    return UserProfile.query.get(int(id))    
-    
+
 @app.route('/signedIn')   
 def signedIn():
     if not session.get('logged_in'):
@@ -190,6 +188,7 @@ def signedIn():
         
         
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     

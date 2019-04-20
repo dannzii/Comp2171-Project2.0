@@ -24,7 +24,7 @@ def upgrade():
     sa.Column('last_name', sa.String(length=80), nullable=True),
     sa.Column('gender', sa.String(length=10), nullable=True),
     sa.Column('email', sa.String(length=80), nullable=True),
-    sa.Column('created_on', sa.String(length=12), nullable=True),
+    sa.Column('created_on', sa.String(length=120), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('user_profiles',
