@@ -2,8 +2,8 @@
 {% extends "base.html" %}
 
 {% block main%}
-
- <h1 class="title">Profiles</h1>
+<img src= "static/img/Home.png"/> <br /><br />
+ <h1 class="title">Customers</h1>
  {% include 'flash_messages.html' %}
  <hr id="title_sep">
 
@@ -14,13 +14,14 @@
             <span class="name">{{ profile['firstname'] }}</span>
             <span class="name">{{ profile['lastname'] }}</span>
             <br>
-            <img class="person" src="{{ url_for('static', filename='icons/person.png')}}"/> <span class="blk">{{ profile['gender'] }}</span>
+            <img class="person" src="{{ url_for('static', filename='img/person.png')}}"/> <span class="blk">{{ profile['gender'] }}</span>
             <br>
-            <img class="person" src="{{ url_for('static', filename='icons/locate.png')}}"/> <span class="blk">{{ profile['email'] }}</span>
+            <img class="person" src="{{ url_for('static', filename='img/email.png')}}"/> <span class="blk">{{ profile['email'] }}</span>
         </div>
         <div class="view-profile center col">
-            <a class="view-btn btn-success" href="{{ url_for('inidi_profile', userid=profile['id']) }}">View profile</a>
+         <a class="view-btn btn-success" href="{{ url_for('inidi_customer_profile', userid=profile['id']) }}"> <button id="customer"> View profile </button></a>
         </div>
+        <br>
     </div>
     {% endfor %}
 </div>

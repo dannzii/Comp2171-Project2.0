@@ -11,6 +11,7 @@
 </p> 
 
 <form action="{{ url_for('Create_appointment') }}" method="post">
+     {{form.csrf_token }}
     <div>
         {{form.appointment.label}}
         <br>

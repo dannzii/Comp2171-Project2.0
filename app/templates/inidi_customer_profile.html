@@ -1,13 +1,12 @@
 {% extends "base.html" %}
 
-{% block css %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/profiles.css') }}" type="text/css" />
-{% endblock %}
-
 {% block main %}
+
+<img src= "static/img/Home.png"/> <br /><br />
+<hr>
+{% include 'flash_messages.html' %}
 <div class="card">
     <div class="row top-info">
-        <img class="card-img-top pro_img" src="{{ url_for('static', filename='Images/'+user.photo) }}"/>
         <div class="col">
           <span class="name">{{user.first_name+" "+user.last_name}}</span>
            <br>

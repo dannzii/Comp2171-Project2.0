@@ -9,6 +9,7 @@
 
 <form method="POST" action="{{ url_for('addemployee') }}">
     <div class = "border-style">
+         {{form.csrf_token }}
         {{form.firstname.label}}
         <br>
         {{form.firstname (class='form-control')}}

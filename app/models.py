@@ -24,6 +24,7 @@ class Customers(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     
+    title = db.Column(db.String(80))
     first_name = db.Column(db.String(80))
     last_name = db.Column(db.String(80))
     address = db.Column(db.String(120))
@@ -32,7 +33,8 @@ class Customers(db.Model):
     email = db.Column(db.String(80))
     created_on = db.Column(db.String(120))
     
-    def __init__(self, first_name, last_name,gender,address,email,phoneNum,created_on):
+    def __init__(self,title, first_name, last_name,gender,address,email,phoneNum,created_on):
+        self.title = title
         self.first_name = first_name
         self.last_name = last_name
         self.address = address

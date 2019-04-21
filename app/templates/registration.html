@@ -9,6 +9,12 @@
     
     <form action="{{ url_for('registration') }}" method="post">
     <div class = "border-style">
+            {{form.csrf_token }}
+            
+            {{ form.title.label}}
+            <br>
+            {{ form.title (class='form-control', placeholder="Mr")}}
+            <br>
             {{ form.firstname.label }}
             <br>
             {{ form.firstname (class='form-control')}}
@@ -32,6 +38,10 @@
             {{ form.email.label }}
             <br>
             {{ form.email (class='form-control', placeholder="example@example.com")}}
+            <br>
+            {{ form.Company_name.label}}
+            <br>
+            {{ form.Company_name (class='form-control', placeholder="A corp Or if none N/A")}}
        
         <br>
         <input type="submit" class="btn btn-primary"/>

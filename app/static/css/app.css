@@ -12,7 +12,14 @@ body {
     border-radius: 3px;
     border-top: 3px #007bff solid;
     box-shadow:    3px 3px 5px 6px gray;
+    margin-bottom: 20px;
 }
+
+.person{
+   width: 15px;
+  height: 15px;
+}
+
 
 button{
     border-radius: 50px;
@@ -21,4 +28,49 @@ button{
 
 #customer{
     margin: 0 auto;
+    
+}
+
+.card{
+    border-top: 3px #007bff solid;
+     margin: 0 auto;
+    padding-top: 30px;
+    border-radius: 20px;
+}
+
+
+
+.card{
+    width: 500px;
+    height: 500px;
+}
+
+.card-img-top{
+  width: 150px;
+  height: 150px;
+  margin-left: 20px;
+}
+
+
+.btn-container{
+    text-align: center;
+     padding-top: 15%;
+}
+
+.person{
+   width: 10%;
+  height: 10%;
+}
+
+.btn{
+    width: 45%;
+   
+}
+
+.card-title , .card-text{
+    margin-left: 30px;
+}
+
+.name{
+    font-weight: bold;
 }

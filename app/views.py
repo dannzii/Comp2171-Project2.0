@@ -67,22 +67,42 @@ def registration():
     if request.method == "POST":
         
         if thisform.validate_on_submit():
-            Customers(first_name = thisform.get("firstname"))
-            Customers(last_name = thisform.get("lastname"))
-            Customers(gender = thisform.get("gender"))
-            Customers(email = thisform.get("email"))
-            Customers(address = thisform.get("address"))
-            Customers(phoneNum = thisform.get("phoneNum"))
+            try:
+                title = thisform.title.data
+                firstname = thisform.firstname.data
+                lastname = thisform.lastname.data
+                gender = thisform.gender.data
+                email = thisform.email.data
+                address = thisform.address.data
+                phoneNum = thisform.phoneNum.data
+                created = str(datetime.datetime.now()).split()[0]
+                
+                user = Customers(title,firstname, lastname, gender, email, address, phoneNum, created)
             
-            db.session.add(Customers)
+                db.session.add(user)
             
-            db.session.commit()
+                db.session.commit()
             
-        flash('Registration Completed', 'Success')
-        return redirect(url_for('manager'))
+                flash('Registration Completed', 'Success')
+                return redirect(url_for('manager'))
+                
+            except Exception as e:
+                db.session.rollback()
+                print(e)
+                flash("Internal Error", "danger")
+                return render_template("registration.html", form = thisform)
         
-    flash_errors (thisform) 
-    return render_template('registration.html' , form=thisform)
+        errors = form_errors(thisform)
+        flash(''.join(error+" " for error in errors), "danger")
+    return  render_template('registration.html' , form=thisform)
+    
+def form_errors(form):
+    error_list =[]
+    for field, errors in form.errors.items():
+        for error in errors:
+            error_list.append(field+": "+error)
+            
+    return error_list
         
 @app.route('/createAppointment/', methods=['POST', 'GET'])
 @login_required
@@ -103,14 +123,13 @@ def Create_appointment():
 @app.route("/customerProfiles")
 @login_required
 def customerprofiles():
-    
     users = Customers.query.all()
     profiles = []
     
     for user in users:
-        profiles.append({"firstname":user.first_name, "lastname": user.last_name, "gender": user.gender, "email":user.email, "created_on":user.created_on, "id":user.id})
+        profiles.append({"firstname":user.first_name, "lastname": user.last_name, "gender": user.gender, "email": user.email, "created_on":user.created_on, "id":user.id})
     
-    return render_template("list-of-customer.html", profile = profiles)
+    return render_template("list-of-customer.html", profiles = profiles)
     
 @app.route('/profile/<userid>')
 @login_required
