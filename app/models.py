@@ -1,4 +1,5 @@
 from . import db
+import datetime
 from werkzeug.security import generate_password_hash
 from flask_login import UserMixin
 
@@ -28,7 +29,7 @@ class Customers(db.Model):
     first_name = db.Column(db.String(80))
     last_name = db.Column(db.String(80))
     address = db.Column(db.String(120))
-    gender = db.Column(db.String(10))
+    gender = db.Column(db.String(100))
     phoneNum = db.Column(db.String(80))
     email = db.Column(db.String(80))
     created_on = db.Column(db.String(120))
@@ -51,15 +52,15 @@ class CreateUser(db.Model):
     first_name = db.Column(db.String(80))
     last_name = db.Column(db.String(80))
     address = db.Column(db.String(120))
-    gender = db.Column(db.String(10))
+    gender = db.Column(db.String(100))
     email = db.Column(db.String(80))
     username = db.Column(db.String(80))
-    password = db.Column(db.String(80))
-    user_type = db.Column(db.String(100))
-    created_on = db.Column(db.String(12))
+    password = db.Column(db.String(257))
+    usertype = db.Column(db.String(100))
+    created_on = db.Column(db.String(120))
     
     
-    def __init__(self, first_name, last_name,gender,email,username,password,created_on,address,user_type):
+    def __init__(self, first_name, last_name,gender,email,username,password,address,usertype):
         self.first_name = first_name
         self.last_name = last_name
         self.gender = gender
@@ -67,8 +68,38 @@ class CreateUser(db.Model):
         self.address = address
         self.username = username
         self.password = generate_password_hash(password, method='pbkdf2:sha256')
-        self.created_on = created_on
-        self.user_type = user_type
+        self.created_on = str(datetime.datetime.now())[:-16]
+        self.usertype = usertype
+        
+class appointment(db.Model):
+    __tablename__ = 'appointment'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    
+    appointment = db.Column(db.String(120))
+    appointmentdate = db.Column(db.String(120))
+    
+    
+    def __init__(self,appointment,appointmentdate):
+        self.appointment = appointment
+        self.appointmentdate = appointmentdate
+
+class ac(db.Model):
+    __tablename__ = 'ac_units'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    
+    actype = db.Column(db.String(257))
+    acissue = db.Column(db.String(257))
+    service =db.Column(db.String(200))
+    
+    
+    def __init__(self,actype,acissue, service):
+        self.actype = actype
+        self.acissue = acissue
+        self.service = service
+        
+        
 
     def is_authenticated(self):
         return True

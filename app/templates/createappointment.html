@@ -4,21 +4,30 @@
 <h1>
    Appointment 
 </h1>
+ {% include 'flash_messages.html' %}
 <hr>
 
 <p> 
     Set appointment here.
-</p> 
+</p>
+
 
 <form action="{{ url_for('Create_appointment') }}" method="post">
-     {{form.csrf_token }}
-    <div>
-        {{form.appointment.label}}
+     
+    <div class = "border-style">
+        {{form.csrf_token }}
+        
+        {{form.appointmentname.label}}
         <br>
-        {{form.appointment}}
+        {{form.appointmentname (class='form-control')}}
+        <br>
+        {{form.appointmentdate.label}}
+        <br>
+        {{form.appointmentdate (class='form-control')}}
+        <br>
+        <input type="submit" class="btn btn-primary"/>
     </div>
-    <br>
-    <input type="submit" class="btn btn-primary"/>
+    
 </form>
 
 

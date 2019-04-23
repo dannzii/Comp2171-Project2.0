@@ -28,17 +28,21 @@ button{
 
 #customer{
     margin: 0 auto;
+    background-color: #66ff99;
     
 }
 
 .card{
     border-top: 3px #007bff solid;
-     margin: 0 auto;
+    margin: 0 auto;
     padding-top: 30px;
     border-radius: 20px;
 }
 
-
+.pro-data{
+    width:50px;
+    height:100px;
+}
 
 .card{
     width: 500px;
@@ -46,8 +50,8 @@ button{
 }
 
 .card-img-top{
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 100px;
   margin-left: 20px;
 }
 

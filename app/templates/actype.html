@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+
+{% block main %}
+
+<h1> 
+    A/C Type
+</h1>
+ {% include 'flash_messages.html' %}
+<hr>
+
+<form action="{{ url_for('Ac') }}" method="post">
+    <div class = "border-style">
+        {{form.csrf_token }}
+        {{form.actype.label}}
+        <br>
+        {{form.actype (class='form-control', placeholder="Panasonic")}}
+        <br>
+        {{form.acissue.label}}
+        <br>
+        {{form.acissue (class='form-control')}}
+        <br>
+        {{form.service.label}}
+        <br>
+        {{form.service (class='form-control')}}
+        <br>
+        <input type="submit" class="btn btn-primary"/>
+    </div>
+</form>
+
+{% endblock %}

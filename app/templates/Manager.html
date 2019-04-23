@@ -3,7 +3,10 @@
 
 {% block main %}
 
+<img src= "/static/img/Home.png"/> <br /><br />
  {% include 'flash_messages.html' %}
+<hr>
+
 
 <div class="CenterBox">
  <a href="{{ url_for('addemployee') }}">
@@ -23,16 +26,8 @@
  
  <br>
  <br>
-
- <a href = "{{ url_for('Create_appointment') }}"> 
-     <button id="customer" type="submit"> 
-         Create Appointment 
-     </button>
- </a>
- <br>
- <br>
  
- <a href = "{{ url_for('customerprofiles') }}"> 
+  <a href = "{{ url_for('customerprofiles') }}"> 
      <button id="customer" type="submit"> 
          Customer Search 
      </button>
@@ -40,7 +35,7 @@
  <br>
  <br>
  
- <a href="">
+ <a href="#">
      <button id="customer" type="submit"> 
          Delete Client 
      </button>

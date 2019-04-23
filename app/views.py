@@ -5,8 +5,8 @@ from flask import render_template, request, redirect, url_for, flash, session, a
 from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash
 from flask_login import login_user, logout_user, current_user, login_required
-from app.forms import Customer, User, Appointment, LoginUser
-from app.models import UserProfile, Customers, CreateUser
+from app.forms import Customer, User, Appointment, LoginUser, AC
+from app.models import UserProfile, Customers, CreateUser, ac, appointment
 
 
 @app.route('/')
@@ -33,6 +33,8 @@ def manager():
     return render_template('Manager.html')
 
 
+
+
 @app.route('/addemployee/', methods=['POST', 'GET'])
 @login_required
 def addemployee():
@@ -41,25 +43,35 @@ def addemployee():
     if request.method == "POST":
         
         if form.validate_on_submit():
-            CreateUser(first_name = form.get("firstname"))
-            CreateUser(last_name = form.get("lastname"))
-            CreateUser(gender = form.get("gender"))
-            CreateUser(email = form.get("email"))
-            CreateUser(address = form.get("address"))
-            CreateUser(username = form.get("username"))
-            CreateUser(password = form.get("password"))
-            CreateUser(user_type = form.get("User_type"))
+            try:
+                firstname = form.firstname.data
+                lastname = form.lastname.data
+                gender = form.gender.data
+                email = form.email.data
+                address = form.address.data
+                username = form.username.data
+                password = form.password.data
+                usertype = form.usertype.data
+                
+                user = CreateUser(firstname,lastname,gender,email,address,username,password,usertype)
             
-            db.session.add(CreateUser)
+                db.session.add(user)
             
-            db.session.commit()
-        flash('Registration Completed', 'Success')
-        return redirect(url_for('manager'))
-    
-    flash_errors (form)  
+                db.session.commit()
+                flash('Registration Completed', 'Success')
+                return redirect(url_for('manager'))
+                
+            except Exception as e:
+                db.session.rollback()
+                print(e)
+                flash("Internal Error", "danger")
+                return render_template("addemployee.html", form = form)
+        
+        errors = form_errors(form)
+        flash(''.join(error+" " for error in errors), "danger")
     return render_template('addemployee.html',form=form)
-
-
+    
+    
 @app.route('/registerClient', methods=['POST', 'GET'])
 @login_required
 def registration():
@@ -84,7 +96,7 @@ def registration():
                 db.session.commit()
             
                 flash('Registration Completed', 'Success')
-                return redirect(url_for('manager'))
+                return redirect(url_for('customerprofiles'))
                 
             except Exception as e:
                 db.session.rollback()
@@ -111,14 +123,29 @@ def Create_appointment():
     this_form = Appointment()
     if request.method == "POST":
         if this_form.validate_on_submit():
+            try:
+                appointmentname = this_form.appointmentname.data
+                appointmentdate = this_form.appointmentdate.data
+                
+                user = appointment(appointmentname,appointmentdate)
+                            
+                db.session.add(user)
             
-            appointment= this_form.appointment.data
-            
-            flash('Your appointment has been set')
-            return redirect(url_for('manager'))
-            
-    flash_errors (this_form) 
+                db.session.commit()
+                flash('Your appointment has been set')
+                return redirect(url_for('manager'))
+                
+            except Exception as e:
+                db.session.rollback()
+                print(e)
+                flash("Internal Error", "danger")
+                return render_template("createappointment.html", form = this_form)
+        
+        errors = form_errors(this_form)
+        flash(''.join(error+" " for error in errors), "danger")
     return render_template('createappointment.html', form=this_form)
+
+
 
 @app.route("/customerProfiles")
 @login_required
@@ -151,7 +178,39 @@ def inidi_customer_profile(userid):
 
 def format_date_joined(yy,mm,dd):
     return datetime.date(yy,mm,dd).strftime("%B, %d,%Y")
-   
+    
+
+@app.route('/AC/', methods=['POST', 'GET'])
+@login_required
+def Ac():
+    
+    form = AC()
+    if request.method == "POST":
+        if form.validate_on_submit():
+            try:
+                actype = form.actype.data
+                acissue = form.acissue.data
+                service = form.service.data
+                
+                user = ac(actype,acissue,service)
+                
+                db.session.add(user)
+                
+                db.session.commit()
+                
+                flash('Your air conditioning information has been set')
+                return redirect(url_for('manager'))
+                
+            except Exception as e:
+                db.session.rollback()
+                print(e)
+                flash("Internal Error", "danger")
+                return render_template('actype.html', form = form)
+                
+        errors = form_errors(form)
+        flash(''.join(error+" " for error in errors), "danger")
+    return render_template('actype.html', form=form)
+    
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if current_user.is_authenticated:

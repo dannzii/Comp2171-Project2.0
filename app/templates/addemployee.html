@@ -6,6 +6,8 @@
 <h2> 
     Add Employee
 </h2>
+ {% include 'flash_messages.html' %}
+<hr>
 
 <form method="POST" action="{{ url_for('addemployee') }}">
     <div class = "border-style">
@@ -13,7 +15,7 @@
         {{form.firstname.label}}
         <br>
         {{form.firstname (class='form-control')}}
-    <br>
+        <br>
         {{form.lastname.label}}
         <br>
         {{form.lastname (class='form-control')}}
@@ -38,9 +40,9 @@
         <br>
         {{form.password (class='form-control')}}
         <br>
-        {{form.User_type.label}}
+        {{form.usertype.label}}
         <br>
-        {{form.User_type (class='form-control')}}
+        {{form.usertype (class='form-control')}}
     <br>
     <input type="submit"  class="btn btn-primary"/>
     </div>
